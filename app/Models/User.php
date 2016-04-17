@@ -26,4 +26,20 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /*
+        Validation rules
+    */
+    
+    public static $login_rules = [
+        'username' => 'required',
+        'password' => 'required',
+    ];
+
+    public static $registration_rules = [
+        'username' => 'required|alpha_dash|max:30',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:6|confirmed',
+    ];
+
 }
