@@ -14,9 +14,8 @@
 		<link href="/font-awesome-4.6.1/css/font-awesome.min.css" rel="stylesheet" />
 
 		<!-- CUSTOM STYLES -->
-		<link href="/css/main.css" rel="stylesheet" />
+		<link href="/css/logAndReg.css" rel="stylesheet" />
 
-		@yield('styles')
 
 	</head>
 	<body>
@@ -27,7 +26,6 @@
 	<script src="/js/jquery-2.2.3.min.js"></script>
 	<script src="/js/bootstrap-3.3.6-dist/bootstrap.min.js"></script>
 	<script src="/js/jquery.noty.packaged.min.js"></script>
-
-	@yield('scripts')
+	<script src="/js/custom/logAndReg.js"></script>
 	</body>
 </html>

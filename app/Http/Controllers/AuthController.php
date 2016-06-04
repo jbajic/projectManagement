@@ -7,9 +7,13 @@ use App\Models\User;
 use App\Http\Requests;
 use Auth;
 use Validator;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
 {
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
     public function __construct()
     {
     	$this->middleware('guest', ['except' => 'logout']);
@@ -32,22 +36,36 @@ class AuthController extends Controller
     {
     	$validator = Validator::make($request->input(), User::$login_rules);
 
-    	if( $validator->passes() )
-    	{
-    		if( Auth::attempt(['username' => $request->input('username'), 'password' => $request->input('password')],
-    			 $request->input('remember_me')) )
-    		{
-    			return redirect()->intended('dashboard');
-    		}
-    		else
-    		{
-    			return "failure";
-    		}
-    	}
-    	else
-    	{
-    		return route()->back()->withErrors($validator);
-    	}
+        $throttles = $this->isUsingThrottlesLoginsTrait();
+
+        if( $throttles && $this->hasTooManyLoginAttempts($request) )
+        {
+             return $this->sendLockoutResponse($request);
+        }
+        else
+        {
+            if ($throttles) 
+            {
+                $this->incrementLoginAttempts($request);
+            }
+
+            if( $validator->passes() )
+            {
+                if( Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')],
+                     $request->input('remember_me')) )
+                {
+                    return redirect()->route('dashboard.index');
+                }
+                else
+                {
+                    return redirect()->back()->withInput()->with('message', 'The email and password you entered don\'t match.');
+                }
+            }
+            else
+            {
+                return route()->back()->withInput()->withErrors($validator);
+            }
+        }    	
     }
 
     //register user
@@ -59,7 +77,7 @@ class AuthController extends Controller
 		if( $validator->passes() )
 		{
 				$user = new User;
-				$user->username = $request->input('username');
+				// $user->username = $request->input('username');
 				$user->email = $request->input('email');
 				$user->password = bcrypt($request->input('password'));
 				// $user->confirmation_code = $confirmation_code;
@@ -71,12 +89,11 @@ class AuthController extends Controller
 				// 	$message->to(Input::get('email'), $name)
 				// 				->subject('Potvrdite vašu email adresu');
 				// });
-				return redirect()->route('login');	
+				return redirect()->route('login.get');	
 		}
 		else
 		{
-            dd($validator->errors());
-			return redirect()->back()->withInput()->withErrors($validator);
+			return redirect()->back()->withInput()->withErrors($validator)->with('state', 1);
 		}
     }
 

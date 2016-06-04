@@ -1,8 +1,5 @@
-@extends('app')
+@extends('templates.app')
 
-@section('styles')
-	<link href="/css/logAndReg.css" rel="stylesheet" />
-@endsection
 
 @section('content')
 <div class="container-fluid">
@@ -12,8 +9,7 @@
          <img src="/img/logo2.png" alt="Project Management" class="hidden-xs" />
     </div>
     
-
-    <div class="container">
+     <div class="container {{ Session::has('state') ? ' active':'' }}">
       <div class="card"></div>
       <div class="card">
         <h1 class="title">Sign in</h1>
@@ -21,8 +17,8 @@
             {{ csrf_field() }}
 
           <div class="input-container">
-            <input type="text" id="Username" name="username" required="required" autofocus />
-            <label for="Username">Username</label>
+            <input type="text" id="Email" name="email" required="required" value="{{ old('email') }}" autofocus />
+            <label for="Email">Email</label>
             <div class="bar"></div>
           </div>
 
@@ -33,8 +29,12 @@
           </div>
 
           <div class="footer">
-            <input type="checkbox" id="Username" name="remember_me" required="required" />
+            <input type="checkbox" id="Username" name="remember_me" />
             <label for="Remember_me">Remember me</label>
+          </div>
+
+          <div class="button-container">
+            @include('includes.message')
           </div>
 
           <div class="button-container">
@@ -54,14 +54,14 @@
 
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
 
-            <div class="input-container">
+<!--             <div class="input-container">
                 <input type="text" id="Username" required="required" name="username" />
                 <label for="Username">Username</label>
                 <div class="bar"></div>
-            </div>
+            </div> -->
 
             <div class="input-container">
-                <input type="text" id="Email" required="required" name="email" />
+                <input type="text" id="Email" required="required" name="email" value="{{ old('email') }}" />
                 <label for="Email">Email</label>
                 <div class="bar"></div>
             </div>
@@ -79,6 +79,10 @@
             </div>
 
           <div class="button-container">
+            @include('includes.errors')
+          </div>
+
+          <div class="button-container">
             <button type="submit"><span>Next</span></button>
           </div>
         </form>
@@ -88,6 +92,3 @@
 </div>
 @endsection
 
-@section('scripts')
-    <script src="/js/logAndReg.js"></script>
-@endsection

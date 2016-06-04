@@ -1,0 +1,50 @@
+.ui-autocomplete{
+	background: #FFF;
+	border: 1px solid #ed2553;
+	border-top: 0px;
+	border-radius: 3%;
+    /* scroll results */
+    max-height: 250px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding for vertical scrollbar */
+    /*padding-right: 5px;*/
+    padding-left: 0px;
+    width: 15em;
+}
+
+.ui-autocomplete li{
+  list-style: none;
+}
+
+.ui-autocomplete li a{
+	text-decoration: none;
+	display: block;
+	color: #000;
+	font-weight: 300;
+}
+
+.ui-autocomplete li a:hover{
+	background: rgba(237,37,83, 0.1);
+}
+
+/* highlight results */
+.ui-autocomplete span.hl_results {
+    background-color: #ffff66;
+}
+ 
+/* loading - the AJAX indicator */
+.ui-autocomplete-loading {
+    background: white url('../img/ui-anim_basic_16x16.gif') right center no-repeat;
+}
+ 
+ 
+ 
+/* IE 6 doesn't support max-height
+* we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+    height: 250px;
+}
+

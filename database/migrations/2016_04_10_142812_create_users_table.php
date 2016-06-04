@@ -21,8 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->string('address', 60);
             $table->string('city', 60);
-            // $table->string('confirmation_code', 30)->nullable();
-            // $table->boolean('activated')->default(false);
+            $table->string('avatar')->default('no-avatar.png'); 
+            $table->text('body');
+            $table->string('confirmation_code', 30)->nullable();
+            $table->boolean('activated')->default(false);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
