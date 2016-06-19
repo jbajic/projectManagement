@@ -15,19 +15,16 @@ class ProjectUserTableSeeder extends Seeder
         	array(
         		'project_id' => '1',
         		'user_id' => '1',
-        		'manager' => true,
         		'role' => 'Developer',
         	),
         	array(
         		'project_id' => '2',
         		'user_id' => '1',
-        		'manager' => true,
         		'role' => 'Backend developer',
         	),
         	array(
         		'project_id' => '2',
         		'user_id' => '2',
-                'manager' => false,
         		'role' => 'Frontend developer',
         	),
         );

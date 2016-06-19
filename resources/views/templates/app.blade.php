@@ -14,7 +14,7 @@
 		<link href="/font-awesome-4.6.1/css/font-awesome.min.css" rel="stylesheet" />
 
 		<!-- CUSTOM STYLES -->
-		<link href="/css/logAndReg.css" rel="stylesheet" />
+		<link href="/css/custom/logAndReg.css" rel="stylesheet" />
 
 
 	</head>

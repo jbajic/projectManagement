@@ -20,6 +20,7 @@ class CreateTasksTable extends Migration
             $table->integer('estimated_time')->unsigned();
             $table->integer('project_id')->unsigned();
             $table->integer('task_id')->unsigned()->nullable();
+            $table->timestamps();
         });
 
         Schema::table('tasks', function($table){

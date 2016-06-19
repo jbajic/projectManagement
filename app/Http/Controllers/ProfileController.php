@@ -20,7 +20,7 @@ class ProfileController extends BaseController
         //get all countries
         $countries = Country::all();
     	
-    	return view('dashboard.profile', array('countries' => $countries));
+    	return view('dashboard.profile', array('countries' => $countries, 'user' => $user));
     }
 
     public function show($id)
@@ -43,7 +43,11 @@ class ProfileController extends BaseController
         {
             $status = 3;
         }
-
+        else if( Auth::user()->id == $id )
+        {
+            $status = 4;
+        }
+    
         return view('dashboard.showProfile', array('user' => $user, 'status' => $status));
     }
 
@@ -128,6 +132,54 @@ class ProfileController extends BaseController
         }
     }
 
+    public function displaySearchResults(Request $request)
+    {
+        $this->string = $request->input('search_string');
+
+        $validator = Validator::make($request->all(), [
+            'search_string' => 'required',
+        ]);
+
+        if( $validator->passes() )
+        {
+             $users = User::where( function($query){
+                $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%$this->string%"])
+                        ->orWhereRaw("CONCAT(last_name, ' ', first_name) LIKE ?", ["%$this->string%"])
+                        ->orWhereRaw("username LIKE ?", ["%$this->string%"]);
+            })
+            ->paginate(15);
+
+            foreach ($users as $user) 
+            {
+                $user->status = 0;
+                if( Auth::user()->isFriendWith($user) )
+                {
+                    $user->status = 1;
+                }
+                else if( Auth::user()->hasFriendRequestPending($user) )
+                {
+                    $user->status = 2;
+                }
+                else if( Auth::user()->hasFriendRequestReceveid($user) )
+                {
+                    $user->status = 3;
+                }
+                else if( Auth::user()->id == $user->id )
+                {
+                    $user->status = 4;
+                }
+
+                $user->name = $user->name;
+            }
+
+            return view('dashboard.searchResults', array('users' => $users));
+        }
+        else
+        {
+            return redirect()->back();       
+        }
+    }
+
     public function changeAvatar(Request $request)
     {
         // $this->validate($request, )
@@ -141,6 +193,7 @@ class ProfileController extends BaseController
         {
             $oldImage = $user->avatar;
 
+            //delete previoues users avatar
             unlink(sprintf(public_path() . '/img/avatars/' . $oldImage));
         }    
 

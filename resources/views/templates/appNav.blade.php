@@ -7,28 +7,32 @@
 		<meta name="_token" content="{!! csrf_token() !!}" />
 		<title>Project Management</title>
 
-		<!-- STYLES - BOOSTRAP -->
+		<!-- STYLES -->
+		<!-- <link href="/css/jquery-ui.min.css" rel="stylesheet" /> -->
 		<link href="/css/bootstrap-3.3.6-dist/bootstrap.min.css" rel="stylesheet" />
 		<link href="/css/sweetalert2.min.css" rel="stylesheet" />
+		<link href="/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+		<link href="/css/dragula.min.css" rel="stylesheet" />
+		<link href="/css/awesome-bootstrap-checkbox.css" rel="stylesheet" />
 
 		<!-- ICONS -->
 		<link href="/font-awesome-4.6.1/css/font-awesome.min.css" rel="stylesheet" />
 
 		<!-- CUSTOM STYLES -->
-		<link href="/css/main.css" rel="stylesheet" />
-		<link href="/css/autocomplete.css" rel="stylesheet" />
+		<link href="/css/custom/main.css" rel="stylesheet" />
+		<link href="/css/custom/autocomplete.css" rel="stylesheet" />
+		<link href="/css/custom/project.css" rel="stylesheet" />
+		<link href="/css/custom/showProject.css" rel="stylesheet" />
 
 		@yield('styles')
 
 	</head>
 	<body>
-		<div class="container-fluid">
 
-			@include('includes.navigation')
+		@include('includes.navigation')
 
-			@yield('content')
+		@yield('content')
 			
-		</div>
 	<!--  JAVASCRIPT BOOSTRAP & JQUERY -->
 	<script src="/js/jquery-2.2.3.min.js"></script>
 	<script src="/js/bootstrap-3.3.6-dist/bootstrap.min.js"></script>
@@ -37,9 +41,16 @@
 	<script src="/js/notify.min.js"></script>
 	<script src="/js/sweetalert2.js"></script>
 	<script src="/js/bootstrap-3.3.6-dist/bootstrap-filestyle.min.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js"></script>
+	<script src="/js/dragula.min.js"></script>
+
+	<!-- CUSTOM SCRIPTS					-->
 	<script src="/js/custom/setup.js"></script>
+	<script src="/js/custom/messages.js"></script>
 	<script src="/js/custom/main.js"></script>
 	<script src="/js/custom/profile.js"></script>
+	<script src="/js/custom/addProject.js"></script>
+	<script src="/js/custom/showProject.js"></script>
 
 	@yield('scripts')
 	</body>

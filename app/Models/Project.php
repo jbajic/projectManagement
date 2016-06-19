@@ -9,6 +9,21 @@ class Project extends Model
 {
     protected $table = 'projects';
 
+    // protected $dateFormat = 'd.m.Y. H:i:s';
+
+
+    /**
+    **  VALIDATION
+    */
+
+    public static $create_rules = [
+        'name' => 'required|max:59',
+        'body' => 'required',
+        'client' => 'required|max:59',
+        'deadline' => 'required|date_format:"d.m.Y."',
+        'manager' => 'required|integer|exists:users,id',
+        'members' => '',
+    ];
 
 
     /*
@@ -23,6 +38,11 @@ class Project extends Model
     public function tasks()
     {
     	return $this->hasMany('App\Models\Task', 'project_id', 'id');
+    }
+
+    public function manager()
+    {
+        return $this->belongsTo('App\Models\User', 'manager_id', 'id');
     }
 
 
@@ -45,6 +65,16 @@ class Project extends Model
 	    {
 	    	return number_format(( $solvedTasksTime / $tasksTime ) * 100, 2 );
 	    }
+    }
+
+    public function getCountOfTasks()
+    {
+        return $this->tasks()->whereNull('task_id')->count();
+    }
+
+    public function getCountOfSolvedTasks()
+    {
+        return $this->tasks()->whereNull('task_id')->where('completed', true)->count();   
     }
 
 

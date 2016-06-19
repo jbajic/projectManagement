@@ -11,6 +11,9 @@ class NavigationComposer
 	{
         $requests = Auth::user()->friendRequestPending();
 
-        $view->with( array('name' => Auth::user()->name, 'friendRequests' => $requests, 'avatar' => Auth::user()->avatar ));
+        $numberOfRequests = count($requests);
+
+        $view->with( array('name' => Auth::user()->name, 'friendRequests' => $requests, 'avatar' => Auth::user()->avatar, 
+        				'numberOfRequests' => $numberOfRequests ));
 	}
 }

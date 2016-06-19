@@ -52,7 +52,7 @@ $(document).ready( function(){
             
         }
     }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-        console.log(item.avatar);
+        
          return $( "<li class='li-auto'></li>" ).data("item.autocomplete", item)
             .append( "<a href=" + myUrl + "profile/" + item.id + "><img src='" + myUrl + "/img/avatars/" + item.avatar + "' class='avatar-icon avatar-icon-s' /><span>"
                          + item.name + "</span></a>" )

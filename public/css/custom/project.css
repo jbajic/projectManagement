@@ -1,0 +1,148 @@
+.groups-border{
+	border: 2px solid #ed2553;
+	border-radius: 4px;
+}
+
+.developers { 
+	margin-top: 8px;
+	float: left; 
+	width: 100%; 
+	min-height: 12em;  
+	overflow-y: auto; 
+	max-height: 26em;
+	padding-left: 0.3em;
+}
+
+.elem { 
+	position: relative;
+  	float: left;
+ 	width: 6em;
+  	text-align: center;
+  	padding: 3px;
+  	margin: 7px;
+  	border: 2px solid #ddd;	
+  	border-radius: 4px;
+  	z-index: 1;
+  	list-style-type: none;
+}
+
+.developers li:hover {
+  	box-shadow:0px 0px 15px #AAA;
+}
+
+.developerimg {
+	position:relative;
+	z-index:1;
+	border-radius:50%;
+	border:3px solid rgba(94, 91, 111, 0.31);
+	width: 100%;
+	height: 70px; 
+	cursor: move; 
+}
+
+.elem h5 { 
+	margin: 0 0 0.4em; 
+	cursor: move; 
+	min-height: 2.5em; 
+	text-align: center; 
+	background: none;
+	border: none;
+	color: #333;
+	text-transform: capitalize;
+}
+
+
+.elem a.ui-icon-star { 
+	float: left; 
+}
+
+.manager {
+	border-color: rgba(237,37,83, 0.8) !important;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(237,37,83, 0.6) !important;
+}
+
+/*#manager { 
+	float: left; 
+	width: 100%; 
+	min-height: 150px; 
+	padding: 1%; 
+	margin: 7px !important;
+	background: #E5EEF4;
+	border-radius: 4px;
+	border: none;
+}
+
+#manager h4 { 
+	line-height: 18px; 
+	margin: 0 0 0.4em; 
+	background: none;
+	border: none;
+	color: #333;
+	padding: 5px;
+}
+
+#manager h4 .ui-icon { 
+	float: left; 
+}
+
+#manager > .developers h5 { 
+	display: none; 
+}
+
+#manager > .developers a.ui-icon-plus{
+	display: none;
+}
+
+#manager > .developers li{
+	background: transparent;
+	border: transparent;
+}*/
+
+#team { 
+	float: left; 
+	width: 100%; 
+	min-height: 239px; 
+	padding: 1%; 
+	overflow-y:auto;
+	margin: 7px !important;
+	background: #E5EEF4;
+	border-radius: 4px;
+	border: none;
+}	
+
+#team h4 { 
+	line-height: 18px; 
+	margin: 0 0 0.4em; 
+	background: none;
+	border: none;
+	color: #333;
+	padding: 5px;
+}
+
+#team h4 .ui-icon { 
+	float: left; 
+}
+
+#team .developers h5{ 
+	display: none; 
+}
+
+#team > .developers a.ui-icon-star{
+	display: none;
+}
+
+#team > .developers li{
+	background: transparent;
+	border: transparent;
+}
+
+.btns{
+	margin-right: auto; 
+	margin-left: auto; 
+	display: inline-block;
+	padding: 0.7em 1.4em;
+}
+
+.btns:hover{
+	color:white;
+}

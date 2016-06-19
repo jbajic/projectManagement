@@ -61,17 +61,19 @@ Route::group(['middleware' => ['web']], function () {
 
 		Route::post('/profile/search', array( 'uses' => 'ProfileController@search' ));
 
-		Route::post('/profile', array('uses' => 'ProfileController@changeAvatar', 'as' => 'profile.changeAvatar' ));
+		Route::get('profile/search', array( 'uses' => 'ProfileController@displaySearchResults', 'as' => 'profile.displaySearchResults' ));
 
-		Route::post('/profile/addFriend', array('uses' => 'ProfileController@addFriend' ));
+		Route::post('/profile', array( 'uses' => 'ProfileController@changeAvatar', 'as' => 'profile.changeAvatar' ));
 
-		Route::post('/profile/rescindInvitation', array('uses' => 'ProfileController@rescindInvitation' ));
+		Route::post('/profile/addFriend', array( 'uses' => 'ProfileController@addFriend' ));
 
-		Route::post('/profile/removeFriend', array('uses' => 'ProfileController@removeFriend' ));
+		Route::post('/profile/rescindInvitation', array( 'uses' => 'ProfileController@rescindInvitation' ));
 
-		Route::post('/profile/acceptFriend', array('uses' => 'ProfileController@acceptFriend' ));
+		Route::post('/profile/removeFriend', array( 'uses' => 'ProfileController@removeFriend' ));
 
-		Route::post('/profile/refuseFriend', array('uses' => 'ProfileController@refuseFriend' ));
+		Route::post('/profile/acceptFriend', array( 'uses' => 'ProfileController@acceptFriend' ));
+
+		Route::post('/profile/refuseFriend', array( 'uses' => 'ProfileController@refuseFriend' ));
 
 		Route::resource('profile', 'ProfileController',
 				['except' => ['create', 'store', 'delete']]);
@@ -81,6 +83,14 @@ Route::group(['middleware' => ['web']], function () {
 		*	**	PROJECTS
 
 		*/
+		Route::post('/project/checkTask', array( 'uses' => 'ProjectController@checkTask' ));
+
+		Route::post('/project/addTask', array( 'uses' => 'ProjectController@addTask' ));
+
+		Route::post('/project/deleteTask', array( 'uses' => 'ProjectController@deleteTask' ));
+
+		Route::post('/project/deleteCategory', array( 'uses' => 'ProjectController@deleteCategory' ));
+
 		Route::resource('project', 'ProjectController');
 	
 	});

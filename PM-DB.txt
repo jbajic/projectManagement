@@ -1,0 +1,82 @@
+DROP DATABASE IF EXISTS projectmanagement;
+
+CREATE DATABASE projectmanagement CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE projectmanagement;
+
+CREATE TABLE users(
+	id			INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	first_name		VARCHAR(30),
+	last_name		VARCHAR(30),
+	username		VARCHAR(30) NOT NULL,
+	email			VARCHAR(255) NOT NULL UNIQUE,
+	password		VARCHAR(60),
+	address			VARCHAR(60),
+	city			VARCHAR(60),
+	country_id		INT UNSIGNED,
+	created_at		TIMESTAMP,
+	updated_at		TIMESTAMP,
+	deleted_at		TIMESTAMP,
+	activated		TINYINT(1) DEFAULT 0,
+	CONSTRAINT PK_clanovi PRIMARY KEY(id)
+);
+
+CREATE TABLE password_resets(
+	email			VARCHAR(255),
+	token			VARCHAR(255),
+	created_at		TIMESTAMP
+);
+
+CREATE TABLE projects(
+	id			INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	name			VARCHAR(60),
+	body			TEXT,
+	deadline		DATETIME,
+	client			VARCHAR(60),
+	completed		TINYINT(1) DEFAULT 0,
+	created_at		TIMESTAMP,
+	updated_at		TIMESTAMP,
+	CONSTRAINT PK_projects PRIMARY KEY(id)
+);
+
+CREATE TABLE project_user(
+	project_id		INT UNSIGNED,
+	user_id			INT UNSIGNED,
+	manager			TINYINT(1) DEFAULT 0,
+	role			VARCHAR(30)
+);
+
+CREATE TABLE tasks(
+	id			INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	name			VARCHAR(60),
+	body			VARCHAR(255),
+	completed		TINYINT(1) DEFAULT 0,
+	estimated_time		INT UNSIGNED,
+	project_id		INT UNSIGNED,
+	task_id			INT UNSIGNED,
+	CONSTRAINT PK_tasks PRIMARY KEY(id)
+);
+
+CREATE TABLE task_user(
+	task_id			INT UNSIGNED,
+	user_id			INT UNSIGNED	
+);
+
+CREATE TABLE countries(
+	id			INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	name			VARCHAR(50),
+	CONSTRAINT PK_countries PRIMARY KEY(id)
+);
+
+ALTER TABLE users ADD CONSTRAINT FK_users_countries FOREIGN KEY (country_id) REFERENCES countries (id);
+
+ALTER TABLE project_user ADD CONSTRAINT FK_project_user_projects FOREIGN KEY (project_id) REFERENCES projects (id);
+ALTER TABLE project_user ADD CONSTRAINT FK_project_user_users FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE tasks ADD CONSTRAINT FK_tasks_projects FOREIGN KEY (project_id) REFERENCES projects (id);
+ALTER TABLE tasks ADD CONSTRAINT FK_tasks FOREIGN KEY (task_id) REFERENCES tasks (id);
+
+ALTER TABLE task_user ADD CONSTRAINT FK_task_user_tasks FOREIGN KEY (task_id) REFERENCES tasks (id);
+ALTER TABLE task_user ADD CONSTRAINT FK_task_user_users FOREIGN KEY (user_id) REFERENCES users (id);
+
+CREATE INDEX IN_password_resets_email ON password_resets (email);
+CREATE INDEX IN_password_resets_token ON password_resets (token);

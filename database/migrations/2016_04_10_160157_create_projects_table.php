@@ -18,10 +18,17 @@ class CreateProjectsTable extends Migration
             $table->text('body');
             $table->string('client', 60);
             $table->timestamp('deadline');
+            $table->integer('manager_id')->unsigned();
             $table->boolean('completed')->default(false);
             $table->timestamps();
         });
+
+        Schema::table('projects', function($table){
+            $table->foreign('manager_id')->references('id')->on('user_id');
+        });
     }
+
+
 
     /**
      * Reverse the migrations.

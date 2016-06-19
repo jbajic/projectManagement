@@ -72,6 +72,12 @@ class User extends Authenticatable
         }
     }
 
+
+    public function tasks()
+    {
+        return $this->belongsToMany('App\Models\Task', 'task_user', 'user_id', 'task_id');
+    }
+
     public function projects()
     {
         return $this->belongsToMany('App\Models\Project', 'project_user', 'user_id', 'project_id');
@@ -80,6 +86,11 @@ class User extends Authenticatable
     public function country()
     {
         return $this->belongsTo('App\Models\Country', 'country_id', 'id');
+    }
+
+    public function managerTo()
+    {
+        return $this->hasMany('App\Models\Project', 'manager_id', 'id');
     }
 
     /*
