@@ -91,6 +91,8 @@ Route::group(['middleware' => ['web']], function () {
 
 		Route::post('/project/deleteCategory', array( 'uses' => 'ProjectController@deleteCategory' ));
 
+		Route::post('/project/addCategory', array( 'uses' => 'ProjectController@addCategory' ));
+
 		Route::resource('project', 'ProjectController');
 	
 	});

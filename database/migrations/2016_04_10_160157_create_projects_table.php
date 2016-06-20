@@ -17,7 +17,7 @@ class CreateProjectsTable extends Migration
             $table->string('name', 60);
             $table->text('body');
             $table->string('client', 60);
-            $table->timestamp('deadline');
+            $table->date('deadline');
             $table->integer('manager_id')->unsigned();
             $table->boolean('completed')->default(false);
             $table->timestamps();

@@ -50,10 +50,11 @@ class Project extends Model
     public function getPercentageAttribute()
     {
         // SELECT sum(estimated_time) AS value FROM `tasks` where project_id = 1 Group by project_id
-    	$tasksTime = $this->tasks()->sum('estimated_time');
+    	$tasksTime = $this->tasks()->whereNotNull('task_id')->sum('estimated_time');
 
     	$solvedTasksTime = $this
     	    				->tasks()
+                            ->whereNotNull('task_id')
     	    				->where('completed', true)
     	    				->sum('estimated_time');
 
@@ -69,12 +70,12 @@ class Project extends Model
 
     public function getCountOfTasks()
     {
-        return $this->tasks()->whereNull('task_id')->count();
+        return $this->tasks()->whereNotNull('task_id')->count();
     }
 
     public function getCountOfSolvedTasks()
     {
-        return $this->tasks()->whereNull('task_id')->where('completed', true)->count();   
+        return $this->tasks()->whereNotNull('task_id')->where('completed', true)->count();   
     }
 
 

@@ -1,16 +1,8 @@
 $(document).ready( function(){
 
 	var members = [];
-	
-	$('.datepicker').datepicker({
-		format: 'dd.mm.yyyy.',
-		startDate: 0,
-		todayHighlight: true,
-		startView: 0,
-		orientation: "bottom auto",
-		setDate: new Date()
-	});
 
+	startDatepicker();
 
 	dragula([document.getElementById('developers'), document.getElementById('teamMembers')], {
 		moves: function( el, source, handle, sibling ){

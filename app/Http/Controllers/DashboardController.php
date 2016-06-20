@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Models\Project;
 use Auth;
+use Gate;
 use App\Models\User;
 use App\Models\Task;
+use App\Models\Project;
 
 class DashboardController extends BaseController
 {
@@ -27,9 +28,16 @@ class DashboardController extends BaseController
 
     public function test()
     {
-    	$category = Task::find(4);
-        $category = $category->users()->get();
-        dd($category);
+    	$category = Task::find(15);
+
+        if( Gate::allows('deleteCategory', $category) )
+        {
+            dd('success');
+        }
+        else
+        {
+            dd('nein');
+        }
     }
 
 }

@@ -12,8 +12,9 @@ class ProjectPolicy
     use HandlesAuthorization;
 
 
-    public function destroy(User $user,Project $project)
+    public function kingMethod(User $user, Project $project)
     {
         return $user->id === $project->manager_id;
     }
+
 }

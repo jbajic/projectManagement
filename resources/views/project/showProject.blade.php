@@ -82,70 +82,79 @@
 
 			</div>
 		</div>
+		<div>
+			<button type="button" class="btn btn-primary btn-lg" id="addCategory"><i class="fa fa-plus fa-2x"></i></button>
+		</div>
 	</div>
 
 	<hr class="crta crtica" />
 
 	<div class="row">
-	@if( count( $project->tasks ) )
-		<div class="table-responsive col-lg-10 col-lg-offset-1">
-		@foreach( $project->tasks as $task )
-				<div class="panel-heading collcat" role="tab" data-param="{{ $task->id }}">
-					<table class="no-style-table">
-						<tr>
-							<td>
+		<div class="table-responsive col-lg-10 col-lg-offset-1 Tasks-list">
+		@if( count( $project->tasks ) )
+			@foreach( $project->tasks as $task )
+					<div class="panel-heading collcat" role="tab" id="panelDis{{ $task->id }}" data-param="{{ $task->id }}">
+						<div class="row">
+							<div class="col-md-10">
 								<h4 class="panel-title">
 									<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $task->id }}" aria-expanded="false" aria-controls="collapse{{ $task->id }}" style="text-decoration: none;">
 										<span class="collcattxt">{{ $task->name }} <i class="fa fa-sort-desc" style="vertical-align: top;"></i></span>
 									</a>
 									<span>{{ $task->tasksFin , " / " , $task->tasksAct + $task->tasksFin }}</span>
 								</h4>
-							</td>
-							<td> <a role="button" class="headings-link addTask" href="#"> <i class="fa fa-plus"></i></a></td>
-							<td> <a role="button" class="headings-link deleteCategory" href="#"> <i class="fa fa-trash"></i></a></td>
-						</tr>
-					</table>
-				</div>
+							</div>
+							<div class="col-md-1">
+								<a role="button" class="headings-link addTask" href="#"> <i class="fa fa-plus"></i></a>
+							</div>
+							<div class="col-md-1">
+								<a role="button" class="headings-link deleteCategory" href="#"> <i class="fa fa-trash"></i></a>
+							</div>
+						</div>
+					</div>
 
-				<div id="collapse{{ $task->id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ $task->id }}">
-					<p><span class="descriptive-text"> Description:</span> {{ $task->body }}</p>
-					<p id="newTaskField{{ $task->id }}"></p>
-					@if( count( $task->categoryTasks ) )
-						<table class="table responsive-table" data-param="{{ $task->id }}">
-							<thead>
-								<th data-sort-ignore="true">Task</th>
-								<th>Description</th>
-								<th data-sort-ignore="true">Estimated time</th>
-								<th><i class="fa fa-check-square-o"></i></th>
-							</thead>
-							<tbody>
-							@foreach( $task->categoryTasks as $t )
-								<tr data-param="{{ $t->id }}">
-									<td> {{ $t->name }}</td>
-									<td> {{ $t->body }}</td>
-									<td> {{ $t->estimated_time }} h</td>
-									<td>
-										<div class="checkbox checkbox-primary">
-										@if( $t->completed )
-											<input type="checkbox" name="completed{{ $t->id }}" value="{{ $t->id }}" checked />
-											<label for="checkbox{{ $t->id }}" ></label>
-										@else
-											<input type="checkbox" name="completed{{ $t->id }}" value="{{ $t->id }}" />
-											<label for="checkbox{{ $t->id }}"></label>
-										@endif
-										</div>
-									</td>
-									<td class="tdstyle"> <a role="button" class="deleteTask"><i class="fa fa-trash"></i></a></td>
-								</tr>
-							@endforeach
-							</tbody>
-						</table>
-					@endif
-				</div>
+					<div id="collapse{{ $task->id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ $task->id }}">
+						<p><span class="descriptive-text"> Description:</span> {{ $task->body }}</p>
+						<p id="newTaskField{{ $task->id }}"></p>
+						@if( count( $task->categoryTasks ) )
+							<table class="table responsive-table" data-param="{{ $task->id }}">
+								<thead>
+									<th data-sort-ignore="true">Task</th>
+									<th>Description</th>
+									<th data-sort-ignore="true">Estimated time</th>
+									<th><i class="fa fa-check-square-o"></i></th>
+								</thead>
+								<tbody>
+								@foreach( $task->categoryTasks as $t )
+									<tr data-param="{{ $t->id }}">
+										<td> {{ $t->name }}</td>
+										<td> {{ $t->body }}</td>
+										<td> {{ $t->estimated_time }} h</td>
+										<td>
+											<div class="checkbox checkbox-primary">
+											@if( $t->completed )
+												<input type="checkbox" name="completed{{ $t->id }}" value="{{ $t->id }}" checked />
+												<label for="checkbox{{ $t->id }}" ></label>
+											@else
+												<input type="checkbox" name="completed{{ $t->id }}" value="{{ $t->id }}" />
+												<label for="checkbox{{ $t->id }}"></label>
+											@endif
+											</div>
+										</td>
+										<td class="tdstyle"> <a role="button" class="deleteTask"><i class="fa fa-trash"></i></a></td>
+									</tr>
+								@endforeach
+								</tbody>
+							</table>
+						@endif
+					</div>
 
-		@endforeach
+			@endforeach
+		@endif
 		</div>
-	@endif
 	</div>
 </div>
+
+<script>
+	var project = '{{ $project->id }}';
+</script>
 @endsection

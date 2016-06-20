@@ -29,6 +29,14 @@ class Task extends Model
         'category' => 'required|integer|exists:tasks,id',
     ];
 
+    public static $create_category_rules = [
+        'name' => 'required',
+        'body' => 'required',
+        'deadline' => 'required|date_format:"d.m.Y."',
+        'project_id' => 'required|exists:projects,id',
+    ];
+
+
     /*
         Relationships, Scopes, Accessors, Mutators
     */

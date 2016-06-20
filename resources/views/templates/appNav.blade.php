@@ -47,6 +47,7 @@
 	<!-- CUSTOM SCRIPTS					-->
 	<script src="/js/custom/setup.js"></script>
 	<script src="/js/custom/messages.js"></script>
+	<script src="/js/custom/functions.js"></script>
 	<script src="/js/custom/main.js"></script>
 	<script src="/js/custom/profile.js"></script>
 	<script src="/js/custom/addProject.js"></script>

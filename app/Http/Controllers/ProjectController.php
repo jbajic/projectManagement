@@ -14,21 +14,13 @@ use App\Models\Task;
 
 class ProjectController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         // return view('project.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $user = Auth::user();
@@ -40,12 +32,7 @@ class ProjectController extends BaseController
         return view('project.create', array('users' => $users, 'user' => $user ));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->input(), Project::$create_rules);
@@ -55,7 +42,7 @@ class ProjectController extends BaseController
             $project = new Project;
             $project->name = $request->input('name');
             $project->client = $request->input('client');
-            $project->deadline = $request->input('deadline');
+            $project->deadline = date('Y-m-d', strtotime(trim($request->input('deadline'))));
             $project->body = $request->input('body');
             
             $manager = User::find($request->input('manager'));
@@ -89,16 +76,13 @@ class ProjectController extends BaseController
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         $project = Project::with(['users', 'manager', 'tasks' => function($query){
-                            $query->whereNull('task_id')->with('categoryTasks');
+                            $query
+                                ->whereNull('task_id')
+                                ->with('categoryTasks');
                         }])
                         ->where('id', $id)
                         ->first();
@@ -115,40 +99,24 @@ class ProjectController extends BaseController
                         'activeTasks' => $countTasks - $solvedTasks, 'permission' => $permission));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         $project = Project::find($id);
         //gate automaticlly check if project exists
-        if( Gate::allows('destroy', $project) )
+        if( Gate::allows('kingMethod', $project) )
         {
             $project->users()->detach();
             $project->tasks()->whereNull('task_id')->delete();
@@ -157,6 +125,7 @@ class ProjectController extends BaseController
         }
         return redirect()->route('dashboard.index')->withInfo('Project has been deleted!');
     }
+
 
     public function checkTask(Request $request)
     {
@@ -180,6 +149,7 @@ class ProjectController extends BaseController
         }
         return json_encode(array('status' => 0));
     }
+
 
     public function addTask(Request $request)
     {
@@ -215,6 +185,7 @@ class ProjectController extends BaseController
         }
     }
 
+
     public function deleteTask(Request $request)
     {
         $validator = Validator::make($request->input(), Task::$delete_rules);
@@ -240,6 +211,7 @@ class ProjectController extends BaseController
         }
     }
 
+
     public function deleteCategory(Request $request)
     {
         $validator = Validator::make($request->input(), Task::$delete_category_rules);
@@ -248,7 +220,7 @@ class ProjectController extends BaseController
         {
             $category = Task::find($request->input('category'));
             
-            if( $category && !empty($category) )
+            if( Gate::allows('deleteCategory', $category) )
             {
                 $category->users()->detach();
                 $category->categoryTasks()->delete();
@@ -265,6 +237,36 @@ class ProjectController extends BaseController
         else
         {
             return json_encode(array('status' => 0, 'errors' => $validator->errors()));
+        }
+    }
+
+
+    public function addCategory(Request $request)
+    {
+        $validator = Validator::make($request->input(), Task::$create_category_rules);
+
+        if( $validator->passes() )
+        {
+            $project = Project::find($request->input('project_id'));
+
+            if( Gate::allows('kingMethod', $project) )
+            {
+                $category = new Task;
+                $category->name = $request->input('name');
+                $category->deadline = date('Y-m-d', strtotime(trim($request->input('deadline'))));
+                $category->body = $request->input('body');
+                $project->tasks()->save($category);
+
+                return json_encode(array('status' => 1, 'id' => $category->id));
+            }
+            else
+            {
+                return json_encode(array('status' => 2));
+            }
+        }
+        else
+        {
+            return json_encode(array('stauts' => 0, 'errors' => $validator->errors()));
         }
     }
 
