@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS projectmanagement;
+DROP DATABASE IF EXISTS testing;
 
-CREATE DATABASE projectmanagement CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE projectmanagement;
+CREATE DATABASE testing CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE testing;
 
 CREATE TABLE users(
 	id			INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -69,7 +69,7 @@ CREATE TABLE task_user(
 
 CREATE TABLE countries(
 	id			INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	name			VARCHAR(50),
+	name			VARCHAR(60),
 	code			CHAR(2),
 	CONSTRAINT PK_countries PRIMARY KEY(id)
 );

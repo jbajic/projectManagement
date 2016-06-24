@@ -83,6 +83,13 @@ body {
   /*margin-top: 2.3em;*/
 }
 
+.avatar-icon-ml{
+  width: 7em;
+  height: 7em;
+  margin: auto;
+  margin: 1.5em;
+}
+
 .avatar-icon-m{
   width: 5em;
   height: 5em;

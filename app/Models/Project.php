@@ -9,14 +9,24 @@ class Project extends Model
 {
     protected $table = 'projects';
 
-    // protected $dateFormat = 'd.m.Y. H:i:s';
+    protected $fillable = ['name', 'body', 'deadline', 'client'];
 
+    // protected $dates = ['created_at', 'updated_at', 'deadline'];
 
     /**
     **  VALIDATION
     */
 
     public static $create_rules = [
+        'name' => 'required|max:59',
+        'body' => 'required',
+        'client' => 'required|max:59',
+        'deadline' => 'required|date_format:"d.m.Y."',
+        'manager' => 'required|integer|exists:users,id',
+        'members' => '',
+    ];
+
+    public static $update_rules = [
         'name' => 'required|max:59',
         'body' => 'required',
         'client' => 'required|max:59',
@@ -68,6 +78,13 @@ class Project extends Model
 	    }
     }
 
+    public function getDeadlineAttribute($value)
+    {
+        $value = date_create($value);
+        $value = date_format($value, 'd.m.Y.');
+        return $value;
+    }
+
     public function getCountOfTasks()
     {
         return $this->tasks()->whereNotNull('task_id')->count();
@@ -77,7 +94,5 @@ class Project extends Model
     {
         return $this->tasks()->whereNotNull('task_id')->where('completed', true)->count();   
     }
-
-
 
 }

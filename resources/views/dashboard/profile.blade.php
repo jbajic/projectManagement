@@ -94,6 +94,8 @@
 							@foreach( $countries as $country )
 								@if( $country->id === $user->country_id )
 									<option value="{{ $country->id }}" selected>{{ $country->name }}</option>
+								@else
+									<option value="{{ $country->id }}">{{ $country->name }}</option>
 								@endif
 							@endforeach
 						</select>

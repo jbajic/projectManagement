@@ -13,4 +13,9 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    <FilesMatch "\.(js|css)$">
+        ExpiresActive On
+        ExpiresDefault "access plus 1 weeks"
+    </FilesMatch>
 </IfModule>

@@ -8,18 +8,13 @@ use App\Http\Requests;
 use Gate;
 use Auth;
 use Validator;
+use DB;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Task;
 
 class ProjectController extends BaseController
 {
-
-    public function index()
-    {
-        // return view('project.index');
-    }
-
 
     public function create()
     {
@@ -79,17 +74,18 @@ class ProjectController extends BaseController
 
     public function show($id)
     {
+        // DB::enableQueryLog();
+
         $project = Project::with(['users', 'manager', 'tasks' => function($query){
                             $query
                                 ->whereNull('task_id')
-                                ->with('categoryTasks');
+                                ->with(['categoryTasks' => function($query){
+                                    $query->with('users');
+                                }]);
                         }])
                         ->where('id', $id)
                         ->first();
-        
-        $project->deadline = date_create($project->deadline);
-        $project->deadline = date_format($project->deadline, 'd.m.Y.');
-
+        // dd(DB::getQueryLog());
         $countTasks = $project->getCountOfTasks();
         $solvedTasks = $project->getCountOfSolvedTasks();
 
@@ -102,13 +98,82 @@ class ProjectController extends BaseController
 
     public function edit($id)
     {
-        //
+        $project = Project::with('users')->where('id', $id)->first();
+
+        if( Gate::allows('kingMethod', $project) )
+        {
+            $notMembers = array();
+
+            $user = Auth::user();
+
+            $users = $user->friends();
+            $users[] = $user;
+            
+            $users_count = count($users);
+            $project_users_count = count($project->users);
+            for( $i = 0; $i < $users_count; ++$i ) 
+            {
+                $flag = 0;
+                for( $j = 0; $j < $project_users_count; ++$j )
+                {
+                    if( $users[$i]->id == $project->users[$j]->id )
+                    {
+                        $flag = 1;
+                        break;
+                    }
+                }
+                if( !$flag )
+                {
+                    $notMembers[] = $users[$i];
+                }
+            }
+            
+            return view('project.editProject', array('project' => $project, 'notMembers' => $notMembers, 'users' => $users));
+        }
+        else
+        {
+            return redirect()->back();
+        }
     }
 
  
     public function update(Request $request, $id)
     {
-        //
+        $project = Project::find($id);
+        
+        if( Gate::allows('kingMethod', $project) )
+        {
+            $validator = Validator::make($request->input(), Project::$update_rules);
+
+            if( $validator->passes() )
+            {
+                $project->update($request->input());
+
+                $manager = User::find($request->input('manager'));
+
+                $project->manager()->associate($manager);
+
+                $members = array();
+                if( $request->input('members') !== "" )
+                {
+                    $members = array_map('intval', explode(',', $request->input('members')));
+                }
+
+                $members[] = $manager->id;
+            
+                $project->users()->sync($members);
+
+                return redirect()->route('project.show', array('id' => $id));
+            }
+            else
+            {
+                return redirect()->back()->withErrors($validator);
+            }
+        }
+        else
+        {
+            return redirect()->back();
+        }
     }
 
 
@@ -127,147 +192,6 @@ class ProjectController extends BaseController
     }
 
 
-    public function checkTask(Request $request)
-    {
-        $taskId = $request->input('id');
-        $checked = (bool) $request->input('checked');
 
-        $task = Task::find($taskId);
-        if( $task )
-        {
-            if( $task->completed === 0 && $checked == 1 )
-            {
-                $task->completed = 1;
-                $task->save();
-            }
-            else
-            {
-                $task->completed = 0;
-                $task->save();
-            }
-            return json_encode(array('status' => 1));
-        }
-        return json_encode(array('status' => 0));
-    }
-
-
-    public function addTask(Request $request)
-    {
-        $category_id = $request->input('category');
-
-        $category = Task::find($category_id);
-        $project = Project::find($category->project_id);
-
-        if( $category && !empty($category) && $project && !empty($project) )
-        {
-            $validator = Validator::make($request->input(), Task::$create_rules);
-
-            if( $validator->passes() )
-            {
-                $task = new Task;
-                $task->name = $request->input('name');
-                $task->body = $request->input('body');
-                $task->estimated_time = $request->input('estimated_time');
-
-                $task->category()->associate($category);
-                $project->tasks()->save($task);
-
-                return json_encode(array('status' => 1, 'taskId' => $task->id));
-            }
-            else
-            {
-                return json_encode(array('status' => 0, 'errors' => $validator->errors()));
-            }
-        }
-        else
-        {
-            return json_encode(array('status' => 2));
-        }
-    }
-
-
-    public function deleteTask(Request $request)
-    {
-        $validator = Validator::make($request->input(), Task::$delete_rules);
-
-        if( $validator->passes() )
-        {
-            $task = Task::find($request->input('task'));
-
-            if( $task->task_id == $request->input('category') && $task && !empty($task) )
-            {
-                $task->delete();
-
-                return json_encode(array('status' => 1));
-            }
-            else
-            {
-                return json_encode(array('status' => 2));
-            }
-        }
-        else
-        {
-            return json_encode(array('status' => 0));
-        }
-    }
-
-
-    public function deleteCategory(Request $request)
-    {
-        $validator = Validator::make($request->input(), Task::$delete_category_rules);
-
-        if( $validator->passes() )
-        {
-            $category = Task::find($request->input('category'));
-            
-            if( Gate::allows('deleteCategory', $category) )
-            {
-                $category->users()->detach();
-                $category->categoryTasks()->delete();
-
-                $category->delete();
-
-                return json_encode(array('status' => 1));
-            }
-            else
-            {
-                return json_encode(array('status' => 2));
-            }
-        }
-        else
-        {
-            return json_encode(array('status' => 0, 'errors' => $validator->errors()));
-        }
-    }
-
-
-    public function addCategory(Request $request)
-    {
-        $validator = Validator::make($request->input(), Task::$create_category_rules);
-
-        if( $validator->passes() )
-        {
-            $project = Project::find($request->input('project_id'));
-
-            if( Gate::allows('kingMethod', $project) )
-            {
-                $category = new Task;
-                $category->name = $request->input('name');
-                $category->deadline = date('Y-m-d', strtotime(trim($request->input('deadline'))));
-                $category->body = $request->input('body');
-                $project->tasks()->save($category);
-
-                return json_encode(array('status' => 1, 'id' => $category->id));
-            }
-            else
-            {
-                return json_encode(array('status' => 2));
-            }
-        }
-        else
-        {
-            return json_encode(array('stauts' => 0, 'errors' => $validator->errors()));
-        }
-    }
 
 }

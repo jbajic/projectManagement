@@ -83,17 +83,22 @@ Route::group(['middleware' => ['web']], function () {
 		*	**	PROJECTS
 
 		*/
-		Route::post('/project/checkTask', array( 'uses' => 'ProjectController@checkTask' ));
 
-		Route::post('/project/addTask', array( 'uses' => 'ProjectController@addTask' ));
+		Route::resource('project', 'ProjectController',
+			['except' => ['index']]);
 
-		Route::post('/project/deleteTask', array( 'uses' => 'ProjectController@deleteTask' ));
+		Route::post('/project/{project_id}/task/checkTask', array( 'uses' => 'TaskController@checkTask' ));
 
-		Route::post('/project/deleteCategory', array( 'uses' => 'ProjectController@deleteCategory' ));
+		Route::post('/project/{project_id}/task/deleteCategory', array( 'uses' => 'TaskController@deleteCategory' ));
 
-		Route::post('/project/addCategory', array( 'uses' => 'ProjectController@addCategory' ));
+		Route::post('/project/{project_id}/task/addCategory', array( 'uses' => 'TaskController@addCategory' ));
 
-		Route::resource('project', 'ProjectController');
+		Route::post('/project/{project_id}/task/getCategory', array( 'uses' => 'TaskController@getCategory' ));
+
+		Route::post('/project/{project_id}/task/updateCategory', array( 'uses' => 'TaskController@updateCategory' ));
+
+		Route::resource('project.task', 'TaskController',
+			['except' => ['edit', 'index']]);
 	
 	});
 

@@ -8,11 +8,11 @@
 			<div class="row">
 
 				<div class="col-md-2">
-					<img src="{{ asset('img/avatars/'.$user->avatar) }}" alt="Users avatar" class="avatar-icon avatar-icon-m right" />
+					<img src="{{ asset('img/avatars/'.$user->avatar) }}" alt="Users avatar" class="avatar-icon avatar-icon-ml right" />
 				</div>
 
 				<div class="col-md-6">
-					<h2> {{ $user->name }} </h2>
+					<h2><a href="{{ route('profile.show', array('id' => $user->id)) }}" class="removeDecoration"> {{ $user->name }} </a></h2>
 					@if( $user->email )
 						<h4> {{ $user->email }} </h4>
 					@endif

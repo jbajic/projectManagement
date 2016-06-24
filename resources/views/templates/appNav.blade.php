@@ -14,6 +14,7 @@
 		<link href="/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
 		<link href="/css/dragula.min.css" rel="stylesheet" />
 		<link href="/css/awesome-bootstrap-checkbox.css" rel="stylesheet" />
+		<link href="/css/chosen.min.css" rel="stylesheet" />
 
 		<!-- ICONS -->
 		<link href="/font-awesome-4.6.1/css/font-awesome.min.css" rel="stylesheet" />
@@ -43,6 +44,7 @@
 	<script src="/js/bootstrap-3.3.6-dist/bootstrap-filestyle.min.js"></script>
 	<script src="/js/bootstrap-datepicker.min.js"></script>
 	<script src="/js/dragula.min.js"></script>
+	<script src="/js/chosen.jquery.min.js"></script>
 
 	<!-- CUSTOM SCRIPTS					-->
 	<script src="/js/custom/setup.js"></script>

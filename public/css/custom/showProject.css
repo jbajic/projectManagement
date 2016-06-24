@@ -174,14 +174,19 @@ table.no-style-table {
     width: 45px;
     border-radius: 50%;
 }
-
+/*
 .chosen-choices{
     background: #E5EEF4 !important; 
     border: none !important;
 }
-
-.chosen-choices li.search-field input{
-    width: 100% !important; 
+*/
+/*
+    remove glow from select plugin chosen
+*/
+.chosen-choices li input:focus{
+    border: none !important;
+    box-shadow: none !important;
+    outline: 0 none !important; 
 }
 
 .chosen-container-multi{

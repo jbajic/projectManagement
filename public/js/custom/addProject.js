@@ -1,7 +1,5 @@
 $(document).ready( function(){
 
-	var members = [];
-
 	startDatepicker();
 
 	dragula([document.getElementById('developers'), document.getElementById('teamMembers')], {

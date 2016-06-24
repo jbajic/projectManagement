@@ -28,16 +28,9 @@ class DashboardController extends BaseController
 
     public function test()
     {
-    	$category = Task::find(15);
+    	$task = Project::where('id', 1)->first();
 
-        if( Gate::allows('deleteCategory', $category) )
-        {
-            dd('success');
-        }
-        else
-        {
-            dd('nein');
-        }
+        dd($task->deadline);
     }
 
 }

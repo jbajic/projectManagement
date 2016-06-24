@@ -52,6 +52,9 @@ class User extends Authenticatable
         'body' => '',
     ];
 
+    // Accessors: Format something when retrieving from the database
+    // Mutators: Format something when saving to the database
+
     /*
         Relationships, Scopes, Accessors, Mutators
     */
@@ -70,6 +73,11 @@ class User extends Authenticatable
         {
             return $this->email;
         }
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
     }
 
 

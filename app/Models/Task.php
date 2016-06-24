@@ -8,9 +8,11 @@ class Task extends Model
 {
     protected $table = 'tasks';
 
+    protected $fillable = ['name, body, estimated_time, deadline'];
+
 
     /*
-        VLIDATION RULES
+        VALIDATION RULES
     */
 
     public static $create_rules = [
@@ -18,9 +20,10 @@ class Task extends Model
         'body' => 'required',
         'estimated_time' => 'required|integer',
         'category' => 'required|exists:tasks,id',
+        'members' => 'array',
     ];
 
-    public static $delete_rules = [
+    public static $delete_edit_rules = [
         'category' => 'required|integer|exists:tasks,id',
         'task' => 'required|integer|exists:tasks,id',
     ];
@@ -34,6 +37,24 @@ class Task extends Model
         'body' => 'required',
         'deadline' => 'required|date_format:"d.m.Y."',
         'project_id' => 'required|exists:projects,id',
+    ];
+
+    public static $get_task_rules = [
+        'id' => 'required|integer|exists:tasks,id',
+    ];
+
+    public static $update_task_rules = [
+        'name' => 'required',
+        'body' => 'required',
+        'estimated_time' => 'required|integer',
+        'members' => 'array',
+    ];
+
+    public static $update_category_rules = [
+        'id' => 'required|integer|exists:tasks,id',
+        'name' => 'required',
+        'body' => 'required',
+        'deadline' => 'required|date_format:"d.m.Y."',
     ];
 
 
@@ -61,13 +82,11 @@ class Task extends Model
         return $this->belongsTo('App\Models\Task', 'task_id', 'id');
     }
 
-    // public function getCountOfTasksFromCategory()
-    // {
-    // 	return $this->categoryTasks()->count();
-    // }
 
-    // public function getCountOfSolvedTasksFromCategory()
-    // {
-    //     return $this->categoryTasks()->where('completed', true)->count();   
-    // }
+    public function getDeadlineAttribute($value)
+    {
+        $value = date_create($value);
+        $value = date_format($value, 'd.m.Y.');
+        return $value;
+    }
 }
