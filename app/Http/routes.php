@@ -84,6 +84,8 @@ Route::group(['middleware' => ['web']], function () {
 
 		*/
 
+		Route::put('/project/changeStatus/{id}', array( 'uses' => 'ProjectController@changeStatus', 'as' => 'project.changeStatus' ));
+
 		Route::resource('project', 'ProjectController',
 			['except' => ['index']]);
 

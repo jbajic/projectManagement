@@ -12,17 +12,22 @@
 
 				<ul class="dropdown-menu" role="menu">
 						<li><a role="button" href="{{ route('project.edit', array('id' => $project->id)) }}" class="force-li-style">Edit project</a></li>
+
+					<form action="{{ route('project.changeStatus', array('id' => $project->id)) }}" method="POST">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
+					<input type="hidden" name="_method" value="PUT" />
 	    			@if( $project->completed == false )
-	    				<li><a role="button" href="#">Finish project</a></li>
+	    				<li><button type="submit" role="button" class="force-li-style">Finish project</a></li>
 					@else
-						<li><a role="button" href="#">Project in progress</a></li>
+						<li><button type="submit" role="button" class="force-li-style">Restart project</button></li>
 					@endif
+					</form>
 					<form action="{{ route('project.destroy', array('id' => $project->id)) }}" method="POST">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}" />
 						<input type="hidden" name="_method" value="DELETE" />
 
 						<li role="separator" class="divider"></li>
-						<li><button type="submit" role="button" class="force-li-style" type="submit" >Delete project</button></li>
+						<li><button type="submit" role="button" class="force-li-style">Delete project</button></li>
 					</form>
 				</ul>
 			</div>

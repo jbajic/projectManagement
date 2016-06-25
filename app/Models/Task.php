@@ -89,4 +89,9 @@ class Task extends Model
         $value = date_format($value, 'd.m.Y.');
         return $value;
     }
+
+    public function setDeadlineAttribute($value)
+    {
+        $this->attributes['deadline'] = date('Y-m-d', strtotime(trim($value)));
+    }
 }

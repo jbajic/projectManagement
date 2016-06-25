@@ -16,11 +16,18 @@
 
 						<div class="col-md-10">
 							<div class="progress">
-							  <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" 
-							  	aria-valuemin="0" aria-valuemax="100" style="width: {{ $project->percentage }}%; min-width: 3em">
-							  	<a href="{{ route('project.show', array( 'id' => $project->id )) }}"><span> {{ $project->percentage.'% '.$project->name }}</span></a>
-							    <span class="sr-only">{{ $project->percentage }}% Complete (success)</span>
-							  </div>
+								@if( !$project->completed )
+								  <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" 
+								  	aria-valuemin="0" aria-valuemax="100" style="width: {{ $project->percentage }}%; min-width: 3em">
+								  	<a href="{{ route('project.show', array( 'id' => $project->id )) }}"><span> {{ $project->percentage.'% '.$project->name }}</span></a>
+								    <span class="sr-only">{{ $project->percentage }}% Complete (success)</span>
+								  </div>
+							  @else
+							  	<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" 
+								  	aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+								  	<a href="{{ route('project.show', array( 'id' => $project->id )) }}"><span> {{ $project->name }}</span></a>
+								</div>
+							  @endif
 							</div>
 						</div>
 				</div>

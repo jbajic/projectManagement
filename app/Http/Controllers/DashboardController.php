@@ -20,8 +20,11 @@ class DashboardController extends BaseController
     					->projects()
                         ->with('manager')
     					->where('completed', 0)
-    					->take(10)
-    					->get();
+                        ->orWhere( function($query){
+                            $query->where('completed', 1)
+                                    ->where('manager_id', Auth::user()->id);
+                        })
+    					->paginate(10);
 
     	return view('dashboard.index', array('projects' => $projects));
     }

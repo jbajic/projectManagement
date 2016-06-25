@@ -85,6 +85,11 @@ class Project extends Model
         return $value;
     }
 
+    public function setDeadlineAttribute($value)
+    {
+        $this->deadline = date('Y-m-d', strtotime(trim($value)));
+    }
+
     public function getCountOfTasks()
     {
         return $this->tasks()->whereNotNull('task_id')->count();

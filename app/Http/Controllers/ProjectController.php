@@ -37,7 +37,7 @@ class ProjectController extends BaseController
             $project = new Project;
             $project->name = $request->input('name');
             $project->client = $request->input('client');
-            $project->deadline = date('Y-m-d', strtotime(trim($request->input('deadline'))));
+            $project->deadline = $request->input('deadline');
             $project->body = $request->input('body');
             
             $manager = User::find($request->input('manager'));
@@ -189,6 +189,29 @@ class ProjectController extends BaseController
             $project->delete();
         }
         return redirect()->route('dashboard.index')->withInfo('Project has been deleted!');
+    }
+
+    public function changeStatus($id)
+    {
+        $project = Project::find($id);
+
+        if( Gate::allows('kingMethod', $project) )
+        {
+            if( $project->completed == 1 )
+            {
+                $project->completed = 0;
+            }
+            else
+            {
+                $project->completed = 1;
+            }
+            $project->save();
+            return redirect()->route('dashboard.index');
+        }
+        else
+        {
+            return redirect()->back();
+        }
     }
 
 

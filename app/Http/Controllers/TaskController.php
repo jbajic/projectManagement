@@ -196,7 +196,7 @@ class TaskController extends Controller
             {
                 $category = new Task;
                 $category->name = $request->input('name');
-                $category->deadline = date('Y-m-d', strtotime(trim($request->input('deadline'))));
+                $category->deadline = $request->input('deadline');
                 $category->body = $request->input('body');
                 $project->tasks()->save($category);
 
@@ -247,7 +247,7 @@ class TaskController extends Controller
             if( $task && !empty($task) )
             {
                 $task->body = $request->input('body');
-                $task->deadline = date('Y-m-d', strtotime(trim($request->input('deadline'))));
+                $task->deadline = $request->input('deadline');
                 $task->name = $request->input('name');
                 $task->save();
 

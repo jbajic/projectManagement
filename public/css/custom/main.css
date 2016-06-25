@@ -230,7 +230,14 @@ input[disabled].transparent-input{
 }
 
 .media img+span.badge {
-    position: relative;
-    top: -20px;
-    left: -2px;
+  position: relative;
+  top: -20px;
+  left: -2px;
+}
+
+/*
+  progress bars in dashboard
+*/
+.gray-progress-bar{
+  background-color: gray;
 }
