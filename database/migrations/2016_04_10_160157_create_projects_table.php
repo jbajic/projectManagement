@@ -24,7 +24,7 @@ class CreateProjectsTable extends Migration
         });
 
         Schema::table('projects', function($table){
-            $table->foreign('manager_id')->references('id')->on('user_id');
+            $table->foreign('manager_id')->references('id')->on('users');
         });
     }
 

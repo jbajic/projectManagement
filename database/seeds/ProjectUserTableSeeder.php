@@ -15,17 +15,14 @@ class ProjectUserTableSeeder extends Seeder
         	array(
         		'project_id' => '1',
         		'user_id' => '1',
-        		'role' => 'Developer',
         	),
         	array(
         		'project_id' => '2',
         		'user_id' => '1',
-        		'role' => 'Backend developer',
         	),
         	array(
         		'project_id' => '2',
         		'user_id' => '2',
-        		'role' => 'Frontend developer',
         	),
         );
 
