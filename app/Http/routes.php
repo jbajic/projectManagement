@@ -41,6 +41,7 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::get('/resetpassword', array( 'as' => 'reset.password', 'uses' => 'AuthController@resetPassword' ));
 
+
 	/**
 
 	*	**	AUTHENTICATED USERS
@@ -104,4 +105,16 @@ Route::group(['middleware' => ['web']], function () {
 	
 	});
 
+});
+
+Route::group(['middleware' => ['api'],'prefix' => 'api'], function () {
+
+    Route::post('register', 'APIController@register');
+
+    Route::post('login', 'APIController@login');
+
+    Route::group(['middleware' => 'jwt-auth'], function () {
+
+        Route::post('test', 'APIController@get_user_details');
+    });
 });
