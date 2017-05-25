@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -30,7 +31,7 @@ class User extends Authenticatable
     /*
         Validation rules
     */
-    
+
     public static $login_rules = [
         'email' => 'required',
         'password' => 'required',
@@ -61,16 +62,11 @@ class User extends Authenticatable
 
     public function getNameAttribute()
     {
-        if( $this->first_name && $this->last_name )
-        {
-            return $this->first_name.' '.$this->last_name;
-        }
-        else if( $this->username )
-        {
+        if ($this->first_name && $this->last_name) {
+            return $this->first_name . ' ' . $this->last_name;
+        } else if ($this->username) {
             return $this->username;
-        }
-        else
-        {
+        } else {
             return $this->email;
         }
     }
@@ -120,7 +116,17 @@ class User extends Authenticatable
     public function friends()
     {
         return $this->myFriends()->wherePivot('accepted', true)->get()
-                    ->merge($this->friendsOf()->wherePivot('accepted', true)->get());
+            ->merge($this->friendsOf()->wherePivot('accepted', true)->get());
+    }
+
+    public function friendsQuery(Carbon $datetime)
+    {
+        return $this->myFriends()
+            ->wherePivot('accepted', '=', true)
+            ->wherePivot('created_at', '>', $datetime->toDateTimeString())
+            ->get()
+            ->merge($this->friendsOf()
+                ->wherePivot('accepted', true)->get());
     }
 
     //get all request sent by me that have not been accepted
@@ -136,42 +142,50 @@ class User extends Authenticatable
     }
 
     //check if user has a pending request from another user
-    public function hasFriendRequestPending( User $user )
+    public function hasFriendRequestPending(User $user)
     {
-        return (bool) $this->friendRequestPending()->where('id', $user->id)->count();
+        return (bool)$this->friendRequestPending()->where('id', $user->id)->count();
     }
 
     //check if has unaccepted friends requests
-    public function hasFriendRequestReceveid( User $user )
+    public function hasFriendRequestReceveid(User $user)
     {
-        return (bool) $this->friendRequests()->where('id', $user->id)->count();
+        return (bool)$this->friendRequests()->where('id', $user->id)->count();
     }
 
     //add a friend
-    public function addFriend( User $user )
+    public function addFriend(User $user)
     {
         $this->myFriends()->attach($user->id);
     }
 
     //delete friend
-    public function deleteFriend( User $user )
+    public function deleteFriend(User $user)
     {
         $this->friendsOf()->detach($user->id);
         $this->myFriends()->detach($user->id);
     }
 
     //accept friend request
-    public function acceptFriendRequest( User $user )
+    public function acceptFriendRequest(User $user)
     {
         $this->friendRequestPending()->where('id', $user->id)->first()->pivot
-                                                                ->update(array(
-                                                                    'accepted' => true));
+            ->update(array(
+                'accepted' => true));
     }
 
     //check if a auth is friend with a particular user
-    public function isFriendWith( User $user )
+    public function isFriendWith(User $user)
     {
-        return (bool) $this->friends()->where('id', $user->id)->count();
+        return (bool)$this->friends()->where('id', $user->id)->count();
+    }
+
+    /**
+     * Scopes
+     */
+    public function scopeCreatedAt($query, Carbon $datetime)
+    {
+        return $query->where('created_at', '>', $datetime->toDateTimeString());
     }
 
 }

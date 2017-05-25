@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use Gate;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Validator;
-use DB;
 use App\Models\Project;
 use App\Models\User;
-use App\Models\Task;
 
 class ProjectController extends BaseController
 {

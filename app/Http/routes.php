@@ -115,6 +115,12 @@ Route::group(['middleware' => ['api'],'prefix' => 'api'], function () {
 
     Route::group(['middleware' => 'jwt-auth'], function () {
 
-        Route::post('test', 'APIController@get_user_details');
+        Route::get('synchronize-users', 'APIController@synchronizeUsers');
+
+        Route::get('synchronize-projects', 'APIController@synchronizeProjects');
+
+        Route::post('create-project', 'APIController@createProject');
+
+        Route::post('create-task', 'APIController@createTask');
     });
 });

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+
 
 class Project extends Model
 {
@@ -87,7 +89,9 @@ class Project extends Model
 
     public function setDeadlineAttribute($value)
     {
-        $this->deadline = date('Y-m-d', strtotime(trim($value)));
+//        dd(Carbon::createFromFormat('Y-m-d', $value));
+//        $this->deadline = Carbon::createFromFormat('Y-m-d', $value);
+        $this->deadline = $value;
     }
 
     public function getCountOfTasks()
